@@ -42,12 +42,12 @@ Skills are folders of instructions, scripts, and resources that Claude loads dyn
 
 Add this repository as a plugin marketplace:
 ```bash
-/plugin marketplace add <your-github-username>/skills
+/plugin marketplace add windzu/skills
 ```
 
 Then install specific skills:
 ```bash
-/plugin install <skill-name>@<your-github-username>-skills
+/plugin install <skill-name>@windzu-skills
 ```
 
 ### From Local Directory
@@ -73,7 +73,7 @@ Instructions for Claude to follow...
 
 | Skill Name | Description |
 |------------|-------------|
-| (empty)    | Add your skills here |
+| docker-dev-env | Create Docker-based development environments with docker-compose |
 
 ## License
 
