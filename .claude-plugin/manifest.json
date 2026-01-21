@@ -2,8 +2,8 @@
   "name": "wind-skills",
   "version": "1.0.0",
   "description": "Wind's personal Claude skills collection",
-  "author": "wind",
-  "homepage": "https://github.com/wind/skills",
+  "author": "windzu",
+  "homepage": "https://github.com/windzu/skills",
   "skills": [
     {
       "path": "../skills",
