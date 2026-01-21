@@ -1,0 +1,22 @@
+{
+  "name": "windzu-skills",
+  "owner": {
+    "name": "windzu",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Wind's personal Claude skills collection",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "docker-dev-env",
+      "description": "Create Docker-based development environments with docker-compose",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/docker-dev-env"
+      ]
+    }
+  ]
+}
