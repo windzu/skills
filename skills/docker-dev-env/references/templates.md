@@ -21,13 +21,24 @@ ENV PYTHONUNBUFFERED=1
 # 配置国内镜像源
 RUN sed -i 's@deb.debian.org@mirrors.tuna.tsinghua.edu.cn@g' /etc/apt/sources.list.d/debian.sources
 
-# 安装系统依赖
+# 安装系统依赖和常用工具
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
         git \
+        htop \
+        net-tools \
+        tree \
+        unzip \
         vim \
+        zip \
     && rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js (用于 npm 包管理)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm config set registry https://registry.npmmirror.com
 
 # 创建用户
 RUN groupadd -g ${HOST_GID} ${HOST_USER} \
@@ -81,11 +92,16 @@ ENV TZ=Asia/Shanghai
 # 配置国内镜像源
 RUN sed -i 's@deb.debian.org@mirrors.tuna.tsinghua.edu.cn@g' /etc/apt/sources.list.d/debian.sources
 
-# 安装系统依赖
+# 安装系统依赖和常用工具
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
+        htop \
+        net-tools \
+        tree \
+        unzip \
         vim \
+        zip \
     && rm -rf /var/lib/apt/lists/*
 
 # 修改 node 用户 UID/GID 以匹配宿主机
@@ -157,11 +173,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         htop \
         jq \
         less \
+        net-tools \
         openssh-client \
         sudo \
+        tree \
+        unzip \
         vim \
         wget \
+        zip \
     && rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js (用于 npm 包管理)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm config set registry https://registry.npmmirror.com
 
 # 创建用户并添加 sudo 权限
 RUN groupadd -g ${HOST_GID} ${HOST_USER} \
