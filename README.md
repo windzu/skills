@@ -5,13 +5,17 @@ Personal collection of Claude Code skills for specialized tasks.
 ## Repository Structure
 
 ```
-skills/
-├── .claude-plugin/       # Claude Code plugin configuration
-│   └── manifest.json
-├── skills/               # Custom skills directory
-│   └── <skill-name>/     # Each skill in its own folder
-│       └── SKILL.md      # Skill definition file
-├── template/             # Skill template for creating new skills
+skills/                           # Repository root (marketplace)
+├── .claude-plugin/
+│   └── marketplace.json          # Marketplace manifest
+├── plugins/                      # Plugins directory
+│   └── docker-dev-env/           # Plugin: docker-dev-env
+│       └── skills/
+│           └── docker-dev-env/   # Skill definition
+│               ├── SKILL.md
+│               ├── scripts/
+│               └── references/
+├── template/                     # Skill template for creating new skills
 │   └── SKILL.md
 ├── .gitignore
 └── README.md
@@ -23,10 +27,10 @@ Skills are folders of instructions, scripts, and resources that Claude loads dyn
 
 ## Creating a New Skill
 
-1. Copy the `template/SKILL.md` to a new folder under `skills/`:
+1. Create a new plugin directory with a skill folder:
    ```bash
-   mkdir skills/my-new-skill
-   cp template/SKILL.md skills/my-new-skill/SKILL.md
+   mkdir -p plugins/my-new-skill/skills/my-new-skill
+   cp template/SKILL.md plugins/my-new-skill/skills/my-new-skill/SKILL.md
    ```
 
 2. Edit the `SKILL.md` file:
@@ -34,7 +38,17 @@ Skills are folders of instructions, scripts, and resources that Claude loads dyn
    - Write a clear `description`
    - Add your instructions and examples
 
-3. Commit and push to GitHub
+3. Add the plugin entry to `.claude-plugin/marketplace.json`:
+   ```json
+   {
+     "name": "my-new-skill",
+     "description": "Description of the skill",
+     "source": "./plugins/my-new-skill",
+     "strict": false
+   }
+   ```
+
+4. Commit and push to GitHub
 
 ## Installing Skills
 

@@ -38,9 +38,25 @@ COMPOSE_PROJECT_NAME=dev
 # MIRROR_SOURCE=tuna  # 可选: tuna, aliyun, ustc
 EOF
 
+# 创建 Claude Code 数据持久化目录
+mkdir -p .claude-data/dot-claude
+touch .claude-data/claude.json
+
+# 确保 .claude-data 在 .gitignore 中
+if [ -f ".gitignore" ]; then
+    if ! grep -q "^\.claude-data" .gitignore; then
+        echo ".claude-data" >> .gitignore
+    fi
+else
+    echo ".claude-data" > .gitignore
+fi
+
 echo "✅ .env 文件已生成"
 echo "   HOST_UID: ${HOST_UID}"
 echo "   HOST_GID: ${HOST_GID}"
 echo "   HOST_USER: ${HOST_USER}"
 echo ""
+echo "✅ .claude-data/ 目录已创建（Claude Code 数据持久化）"
+echo ""
 echo "现在可以运行 docker compose up 启动开发环境"
+echo "进入容器后运行 claude 进行首次认证"

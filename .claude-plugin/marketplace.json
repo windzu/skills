@@ -12,11 +12,8 @@
     {
       "name": "docker-dev-env",
       "description": "Create Docker-based development environments with docker-compose",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/docker-dev-env"
-      ]
+      "source": "./plugins/docker-dev-env",
+      "strict": false
     }
   ]
 }

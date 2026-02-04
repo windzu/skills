@@ -40,12 +40,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/* \
     && npm config set registry https://registry.npmmirror.com
 
-# 创建用户
+# 创建用户并添加 sudo 权限
 RUN groupadd -g ${HOST_GID} ${HOST_USER} \
-    && useradd -m -u ${HOST_UID} -g ${HOST_GID} -s /bin/bash ${HOST_USER}
+    && useradd -m -u ${HOST_UID} -g ${HOST_GID} -s /bin/bash ${HOST_USER} \
+    && echo "${HOST_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # 配置 pip 镜像
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 安装 Claude Code
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 WORKDIR /workspace
 USER ${HOST_USER}
@@ -67,6 +71,8 @@ services:
     container_name: python-dev
     volumes:
       - .:/workspace
+      - ./.claude-data/dot-claude:/home/${HOST_USER}/.claude
+      - ./.claude-data/claude.json:/home/${HOST_USER}/.claude.json
     stdin_open: true
     tty: true
 ```
@@ -111,6 +117,9 @@ RUN groupmod -g ${HOST_GID} node \
 # 配置 npm 镜像
 RUN npm config set registry https://registry.npmmirror.com
 
+# 安装 Claude Code
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
 WORKDIR /workspace
 USER node
 
@@ -132,6 +141,8 @@ services:
     volumes:
       - .:/workspace
       - node_modules:/workspace/node_modules
+      - ./.claude-data/dot-claude:/home/${HOST_USER}/.claude
+      - ./.claude-data/claude.json:/home/${HOST_USER}/.claude.json
     ports:
       - "3000:3000"
       - "5173:5173"
@@ -194,6 +205,9 @@ RUN groupadd -g ${HOST_GID} ${HOST_USER} \
     && useradd -m -u ${HOST_UID} -g ${HOST_GID} -s /bin/bash ${HOST_USER} \
     && echo "${HOST_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# 安装 Claude Code
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
 WORKDIR /workspace
 USER ${HOST_USER}
 
@@ -214,6 +228,8 @@ services:
     container_name: dev
     volumes:
       - .:/workspace
+      - ./.claude-data/dot-claude:/home/${HOST_USER}/.claude
+      - ./.claude-data/claude.json:/home/${HOST_USER}/.claude.json
     stdin_open: true
     tty: true
 ```
@@ -227,6 +243,9 @@ services:
 ```
 project/
 ├── .env              # 由 init-env.sh 生成
+├── .claude-data/     # Claude Code 数据持久化目录（由 init-env.sh 创建）
+│   ├── dot-claude/   # 映射容器内 ~/.claude
+│   └── claude.json   # 映射容器内 ~/.claude.json
 ├── Dockerfile
 ├── docker-compose.yml
 ├── init-env.sh       # 复制自 skill
@@ -240,6 +259,7 @@ project/
 .git
 .gitignore
 .env
+.claude-data
 *.md
 node_modules
 __pycache__
